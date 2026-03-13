@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Hearts2Hearts – RUDE!</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&family=Bebas+Neue&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ian:    #FF6B9D;
+    --stella: #C084FC;
+    --carmen: #34D399;
+    --jiwoo:  #60A5FA;
+    --yuha:   #FBBF24;
+    --juun:   #F87171;
+    --ana:    #FB923C;
+    --yeon:   #4ADE80;
+    --bg: #0D0D1A;
+    --card: rgba(255,255,255,0.05);
+    --glass: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans Thai', 'Nunito', sans-serif;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a0533 0%, #0d1a3a 50%, #0a2a1a 100%);
+    padding: 40px 20px 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(255,107,157,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(96,165,250,0.15) 0%, transparent 60%);
+  }
+  .header-inner { position: relative; z-index: 1; }
+  .group-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 10vw, 56px);
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, #FF6B9D, #C084FC, #60A5FA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .song-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 6vw, 32px);
+    letter-spacing: 8px;
+    color: #fff;
+    margin-top: 4px;
+    opacity: 0.9;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* MEMBER LEGEND */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 20px 14px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .legend-item {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 8px 6px;
+    text-align: center;
+    border: 1.5px solid transparent;
+    backdrop-filter: blur(8px);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin: 0 auto 4px;
+  }
+  .legend-name {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.25);
+    margin: 28px 0 12px;
+    padding: 0 20px;
+  }
+
+  /* LYRICS */
+  .lyrics-container {
+    padding: 0 14px;
+    max-width: 540px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .line {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px 14px;
+    border-left: 3px solid transparent;
+    transition: transform 0.15s;
+  }
+  .line:active { transform: scale(0.98); }
+  .member-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .line-korean {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .line-thai {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* CHORUS BLOCK */
+  .chorus-block {
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 16px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin: 4px 0;
+  }
+  .chorus-block .line-korean {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* SPOKEN */
+  .spoken {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 10px 14px;
+    border-left: 3px solid rgba(255,255,255,0.2);
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* ALL tag */
+  .all-tag { color: rgba(255,255,255,0.5); }
+
+  /* color classes */
+  .ian    { border-left-color: var(--ian);    }
+  .stella { border-left-color: var(--stella); }
+  .carmen { border-left-color: var(--carmen); }
+  .jiwoo  { border-left-color: var(--jiwoo);  }
+  .yuha   { border-left-color: var(--yuha);   }
+  .juun   { border-left-color: var(--juun);   }
+  .ana    { border-left-color: var(--ana);    }
+  .yeon   { border-left-color: var(--yeon);   }
+
+  .c-ian    { color: var(--ian);    }
+  .c-stella { color: var(--stella); }
+  .c-carmen { color: var(--carmen); }
+  .c-jiwoo  { color: var(--jiwoo);  }
+  .c-yuha   { color: var(--yuha);   }
+  .c-juun   { color: var(--juun);   }
+  .c-ana    { color: var(--ana);    }
+  .c-yeon   { color: var(--yeon);   }
+
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+    padding: 0 20px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="group-name">Hearts2Hearts</div>
+    <div class="song-title">RUDE!</div>
+    <div class="subtitle">2026.02.20 · Single</div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item" style="border-color:var(--ian)">
+    <div class="legend-dot" style="background:var(--ian)"></div>
+    <div class="legend-name c-ian">IAN</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--stella)">
+    <div class="legend-dot" style="background:var(--stella)"></div>
+    <div class="legend-name c-stella">STELLA</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--carmen)">
+    <div class="legend-dot" style="background:var(--carmen)"></div>
+    <div class="legend-name c-carmen">CARMEN</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--jiwoo)">
+    <div class="legend-dot" style="background:var(--jiwoo)"></div>
+    <div class="legend-name c-jiwoo">JIWOO</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--yuha)">
+    <div class="legend-dot" style="background:var(--yuha)"></div>
+    <div class="legend-name c-yuha">YUHA</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--juun)">
+    <div class="legend-dot" style="background:var(--juun)"></div>
+    <div class="legend-name c-juun">JUUN</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--ana)">
+    <div class="legend-dot" style="background:var(--ana)"></div>
+    <div class="legend-name c-ana">A-NA</div>
+  </div>
+  <div class="legend-item" style="border-color:var(--yeon)">
+    <div class="legend-dot" style="background:var(--yeon)"></div>
+    <div class="legend-name c-yeon">YE-ON</div>
+  </div>
+</div>
+
+<!-- ===== VERSE 1 ===== -->
+<div class="section-label">VERSE 1</div>
+<div class="lyrics-container">
+
+  <div class="line ian">
+    <span class="member-tag c-ian">Ian</span>
+    <div class="line-korean">Yeah, let's go — Yeah, yeah</div>
+    <div class="line-thai">เย้ะ เล็ตส์ โก — เย้ะ เย้ะ</div>
+  </div>
+
+  <div class="line juun">
+    <span class="member-tag c-juun">Juun</span>
+    <div class="line-korean">Yeah I walked right in</div>
+    <div class="line-thai">เย้ะ ไอ วอร์คท ไรท์ อิน</div>
+  </div>
+
+  <div class="line juun">
+    <span class="member-tag c-juun">Juun</span>
+    <div class="line-korean">스치는 순간 모두가 My friend</div>
+    <div class="line-thai">สึ-ชิ-นึน ซุน-กัน โม-ดู-กา มาย เฟรนด์</div>
+  </div>
+
+  <div class="line juun">
+    <span class="member-tag c-juun">Juun</span>
+    <div class="line-korean">여기저기서 인사를 건네 Yeah yeah</div>
+    <div class="line-thai">ยอ-กิ-จอ-กิ-ซอ อิน-ซา-รึล กอน-เน เย้ะ เย้ะ</div>
+  </div>
+
+  <div class="line ana">
+    <span class="member-tag c-ana">A-na</span>
+    <div class="line-korean">다 자연스럽게 알아 Give me space</div>
+    <div class="line-thai">ตา จา-ยอน-สือ-รอบ-เก อา-รา กิฟ มี สเปซ</div>
+  </div>
+
+  <div class="line ana">
+    <span class="member-tag c-ana">A-na</span>
+    <div class="line-korean">언제나 그래 눈에 띌 My face</div>
+    <div class="line-thai">ออน-เจ-นา กือ-แร นุ-เน ตทิล มาย เฟซ</div>
+  </div>
+
+  <div class="line ian">
+    <span class="member-tag c-ian">Ian</span>
+    <div class="line-korean">흘겨보지 마 이건 No race</div>
+    <div class="line-thai">ฮึล-กยอ-โบ-จิ มา อิ-กอน โน เรซ</div>
+  </div>
+
+  <div class="line ian">
+    <span class="member-tag c-ian">Ian</span>
+    <div class="line-korean">Nuh uh uh uh</div>
+    <div class="line-thai">นอ อา อา อา</div>
+  </div>
+
+</div>
+
+<!-- ===== PRE-CHORUS 1 ===== -->
+<div class="section-label">PRE-CHORUS 1</div>
+<div class="lyrics-container">
+
+  <div class="line yuha">
+    <span class="member-tag c-yuha">Yuha</span>
+    <div class="line-korean">누가 뭐래도 평범한 건 지루해</div>
+    <div class="line-thai">นู-กา มวอ-แร-โด พยอง-บอม-ฮัน กอน จิ-รู-เฮ</div>
+  </div>
+
+  <div class="line yuha">
+    <span class="member-tag c-yuha">Yuha</span>
+    <div class="line-korean">뭐든 맘대로 <span class="c-carmen">(내 맘대로)</span></div>
+    <div class="line-thai">มวอ-ดึน มัม-แด-โร <span class="c-carmen">(เน มัม-แด-โร) — Carmen</span></div>
+  </div>
+
+  <div class="line stella">
+    <span class="member-tag c-stella">Stella</span>
+    <div class="line-korean">철이 없대도 재밌으면 That's okay</div>
+    <div class="line-thai">ชอ-ริ ออบ-แด-โด แจ-มิส-สือ-มยอน แดทส์ โอเค</div>
+  </div>
+
+  <div class="line stella">
+    <span class="member-tag c-stella">Stella</span>
+    <div class="line-korean">Not enough want more</div>
+    <div class="line-thai">นอท อีนัฟ วอนท์ มอร์</div>
+  </div>
+
+  <div class="line carmen">
+    <span class="member-tag c-carmen">Carmen</span>
+    <div class="line-korean">날 향한 시선에 "Hate me?"</div>
+    <div class="line-thai">นัล เฮียง-ฮัน ชิ-ซอ-เน "เฮท มี?"</div>
+  </div>
+
+  <div class="line carmen">
+    <span class="member-tag c-carmen">Carmen</span>
+    <div class="line-korean">누가 뭐래도 Can't change me</div>
+    <div class="line-thai">นู-กา มวอ-แร-โด แคนท์ เชนจ์ มี</div>
+  </div>
+
+  <div class="line yeon">
+    <span class="member-tag c-yeon">Ye-on</span>
+    <div class="line-korean">지금 이대로 좋아</div>
+    <div class="line-thai">จิ-กึม อิ-แด-โร โจ-อา</div>
+  </div>
+
+  <div class="line yeon">
+    <span class="member-tag c-yeon">Ye-on</span>
+    <div class="line-korean">나다울 때 누구보다 눈부셔 난</div>
+    <div class="line-thai">นา-ดา-อุล แต นู-กู-โบ-ดา นุน-บุ-ชอ นัน</div>
+  </div>
+
+  <div class="line yuha">
+    <span class="member-tag c-yuha">Yuha</span>
+    <div class="line-korean">I've been actin' too</div>
+    <div class="line-thai">ไอฟ บีน แอ็คทิน ทู</div>
+  </div>
+
+</div>
+
+<!-- ===== CHORUS 1 ===== -->
+<div class="section-label">CHORUS 1</div>
+<div class="lyrics-container">
+
+  <div class="line chorus-block" style="border-left-color:rgba(255,255,255,0.3)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">RUDE!</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">이랬다저랬다 No rule</div>
+    <div class="line-thai">อิ-แรต-ตา-จอ-แรต-ตา โน รูล</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">꽤나 뻔뻔한 Attitude</div>
+    <div class="line-thai">กแว-นา พอน-พอน-ฮัน แอตติจูด</div>
+    <div class="line-korean c-ian" style="font-size:13px; margin-top:6px;">(I'm not bad) — Ian</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">You can't make me act right</div>
+    <div class="line-thai">ยู แคนท์ เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+  <div class="line chorus-block" style="border-left-color:rgba(255,255,255,0.3)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">RUDE!</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">I don't care 이게 나라구</div>
+    <div class="line-thai">ไอ โดนท์ แคร์ อิ-เก นา-รา-กู</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">아무렇게나 추는 춤</div>
+    <div class="line-thai">อา-มู-รอก-เก-นา ชู-นึน ชุม</div>
+    <div class="line-korean c-ana" style="font-size:13px; margin-top:6px;">(따라 해) — A-na</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">You can't make me act right</div>
+    <div class="line-thai">ยู แคนท์ เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+</div>
+
+<!-- ===== VERSE 2 ===== -->
+<div class="section-label">VERSE 2</div>
+<div class="lyrics-container">
+
+  <div class="line jiwoo">
+    <span class="member-tag c-jiwoo">Jiwoo</span>
+    <div class="line-korean">쉿, 아니 더 Loud yuh</div>
+    <div class="line-thai">ชวิต อา-นิ ตอ เลาด์ ยอ</div>
+  </div>
+
+  <div class="line jiwoo">
+    <span class="member-tag c-jiwoo">Jiwoo</span>
+    <div class="line-korean">소리 질러 볼까 Yuh</div>
+    <div class="line-thai">โซ-ริ จิล-ลอ โบล-กา ยอ</div>
+  </div>
+
+  <div class="line jiwoo">
+    <span class="member-tag c-jiwoo">Jiwoo</span>
+    <div class="line-korean">늘 시간은 So tight</div>
+    <div class="line-thai">นึล ชิ-กา-นึน โซ ไทท์</div>
+  </div>
+
+  <div class="line jiwoo">
+    <span class="member-tag c-jiwoo">Jiwoo</span>
+    <div class="line-korean">어른이 없는 세상</div>
+    <div class="line-thai">ออ-รือ-นิ ออบ-นึน เซ-ซัง</div>
+  </div>
+
+  <div class="line ana">
+    <span class="member-tag c-ana">A-na</span>
+    <div class="line-korean">오늘은 찾아 That's my type</div>
+    <div class="line-thai">โอ-นือ-รึน ชา-จา แดทส์ มาย ไทป์</div>
+  </div>
+
+  <div class="line ana">
+    <span class="member-tag c-ana">A-na</span>
+    <div class="line-korean">자, 눈 맞춰 볼까</div>
+    <div class="line-thai">จา นุน มัต-ชวอ โบล-กา</div>
+  </div>
+
+  <div class="line juun">
+    <span class="member-tag c-juun">Juun</span>
+    <div class="line-korean">미리 걱정하는 건 버려 잠깐</div>
+    <div class="line-thai">มิ-ริ กอก-จอง-ฮา-นึน กอน บอ-รยอ จัม-กัน</div>
+  </div>
+
+  <div class="line juun">
+    <span class="member-tag c-juun">Juun</span>
+    <div class="line-korean">We living that good life, good life</div>
+    <div class="line-thai">วี ลิฟวิ่ง แดท กู๊ด ไลฟ์ กู๊ด ไลฟ์</div>
+  </div>
+
+</div>
+
+<!-- ===== PRE-CHORUS 2 ===== -->
+<div class="section-label">PRE-CHORUS 2</div>
+<div class="lyrics-container">
+
+  <div class="line yuha">
+    <span class="member-tag c-yuha">Yuha</span>
+    <div class="line-korean">꾸밈 없을수록 Better</div>
+    <div class="line-thai">กู-มิม ออบ-สึล-ซู-รก เบตเตอร์</div>
+  </div>
+
+  <div class="line yuha">
+    <span class="member-tag c-yuha">Yuha</span>
+    <div class="line-korean">더 자연스럽게</div>
+    <div class="line-thai">ตอ จา-ยอน-สือ-รอบ-เก</div>
+  </div>
+
+  <div class="line yeon">
+    <span class="member-tag c-yeon">Ye-on</span>
+    <div class="line-korean">망설임은 Never</div>
+    <div class="line-thai">มัง-ซอ-ริ-มึน เนฟเวอร์</div>
+  </div>
+
+  <div class="line yeon">
+    <span class="member-tag c-yeon">Ye-on</span>
+    <div class="line-korean">이끌린 대로 해</div>
+    <div class="line-thai">อิ-กึล-ลิน แด-โร เฮ</div>
+  </div>
+
+  <div class="line carmen">
+    <span class="member-tag c-carmen">Carmen</span>
+    <div class="line-korean">나다울 때 누구보다 눈부셔 난</div>
+    <div class="line-thai">นา-ดา-อุล แต นู-กู-โบ-ดา นุน-บุ-ชอ นัน</div>
+  </div>
+
+  <div class="line stella">
+    <span class="member-tag c-stella">Stella</span>
+    <div class="line-korean">I've been actin' too</div>
+    <div class="line-thai">ไอฟ บีน แอ็คทิน ทู</div>
+  </div>
+
+</div>
+
+<!-- ===== CHORUS 2 ===== -->
+<div class="section-label">CHORUS 2</div>
+<div class="lyrics-container">
+
+  <div class="line chorus-block" style="border-left-color:rgba(255,255,255,0.3)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">RUDE!</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">이랬다저랬다 No rule</div>
+    <div class="line-thai">อิ-แรต-ตา-จอ-แรต-ตา โน รูล</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">꽤나 뻔뻔한 Attitude</div>
+    <div class="line-thai">กแว-นา พอน-พอน-ฮัน แอตติจูด</div>
+    <div class="line-korean c-carmen" style="font-size:13px; margin-top:6px;">(I'm not bad) — Carmen</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">You can't make me act right</div>
+    <div class="line-thai">ยู แคนท์ เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+  <div class="line chorus-block" style="border-left-color:rgba(255,255,255,0.3)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">RUDE!</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">I don't care 이게 나라구</div>
+    <div class="line-thai">ไอ โดนท์ แคร์ อิ-เก นา-รา-กู</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">아무렇게나 추는 춤</div>
+    <div class="line-thai">อา-มู-รอก-เก-นา ชู-นึน ชุม</div>
+    <div class="line-korean c-jiwoo" style="font-size:13px; margin-top:6px;">(따라 해) — Jiwoo</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">You can't make me act right</div>
+    <div class="line-thai">ยู แคนท์ เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+</div>
+
+<!-- ===== BRIDGE ===== -->
+<div class="section-label">BRIDGE</div>
+<div class="lyrics-container">
+
+  <div class="line stella">
+    <span class="member-tag c-stella">Stella</span>
+    <div class="line-korean">내 멋대로 Move</div>
+    <div class="line-thai">เน มอต-แด-โร มูฟ</div>
+  </div>
+
+  <div class="line stella" style="border-left-color:rgba(255,255,255,0.2)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">Make me act right</div>
+    <div class="line-thai">เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+  <div class="line yeon">
+    <span class="member-tag c-yeon">Ye-on</span>
+    <div class="line-korean">내 멋대로 Move</div>
+    <div class="line-thai">เน มอต-แด-โร มูฟ</div>
+  </div>
+
+  <div class="line ana">
+    <span class="member-tag c-ana">A-na</span>
+    <div class="line-korean">Acting too rude, uh</div>
+    <div class="line-thai">แอ็คทิง ทู รูด อา</div>
+  </div>
+
+</div>
+
+<!-- ===== DANCE BREAK / HIGHLIGHT ===== -->
+<div class="section-label">HIGHLIGHT</div>
+<div class="lyrics-container">
+
+  <div class="line jiwoo juun" style="border-left: none; border-top: 2px solid; border-image: linear-gradient(90deg, var(--jiwoo), var(--juun)) 1; border-radius:12px; border-left: 3px solid var(--jiwoo)">
+    <span class="member-tag"><span class="c-jiwoo">Jiwoo</span> <span style="color:rgba(255,255,255,0.3)">&</span> <span class="c-juun">Juun</span></span>
+    <div class="line-korean">톡 쏘는 말투도</div>
+    <div class="line-thai">ท็อก โซ-นึน มัล-ทู-โด</div>
+  </div>
+
+  <div class="line" style="border-left: 3px solid var(--jiwoo)">
+    <span class="member-tag"><span class="c-jiwoo">Jiwoo</span> <span style="color:rgba(255,255,255,0.3)">&</span> <span class="c-juun">Juun</span></span>
+    <div class="line-korean">숨김없는 표정도</div>
+    <div class="line-thai">ซุม-กิม-ออบ-นึน พยอ-จอง-โด</div>
+  </div>
+
+  <div class="line" style="border-left: 3px solid var(--jiwoo)">
+    <span class="member-tag"><span class="c-jiwoo">Jiwoo</span> <span style="color:rgba(255,255,255,0.3)">&</span> <span class="c-juun">Juun</span></span>
+    <div class="line-korean">솔직한 그대로</div>
+    <div class="line-thai">โซล-จิก-ฮัน กือ-แด-โร</div>
+  </div>
+
+  <div class="line" style="border-left: 3px solid var(--jiwoo)">
+    <span class="member-tag"><span class="c-jiwoo">Jiwoo</span> <span style="color:rgba(255,255,255,0.3)">&</span> <span class="c-juun">Juun</span></span>
+    <div class="line-korean">Feel so cool</div>
+    <div class="line-thai">ฟีล โซ คูล</div>
+  </div>
+
+  <div class="line yeon">
+    <span class="member-tag c-yeon">Ye-on</span>
+    <div class="line-korean">여기저기 다 부러운 눈빛</div>
+    <div class="line-thai">ยอ-กิ-จอ-กิ ตา บู-รอ-อุน นุน-บิต</div>
+  </div>
+
+  <div class="line carmen">
+    <span class="member-tag c-carmen">Carmen</span>
+    <div class="line-korean">Don't call me darling</div>
+    <div class="line-thai">โดนท์ คอล มี ดาร์ลิง</div>
+  </div>
+
+  <div class="line carmen">
+    <span class="member-tag c-carmen">Carmen</span>
+    <div class="line-korean">I'm too rude!</div>
+    <div class="line-thai">ไอม ทู รูด!</div>
+  </div>
+
+</div>
+
+<!-- ===== SPOKEN ===== -->
+<div class="section-label">SPOKEN</div>
+<div class="lyrics-container">
+  <div class="spoken">
+    <span class="c-stella" style="font-weight:700; font-style:normal; display:block; margin-bottom:6px;">Stella</span>
+    "You know what he said to me? (What?)<br>
+    He was like, 'You are so rude'<br>
+    And I was like,<br>
+    'Boy, does it look like I could care?<br>
+    I couldn't even care less!'"
+  </div>
+</div>
+
+<!-- ===== FINAL CHORUS ===== -->
+<div class="section-label">FINAL CHORUS</div>
+<div class="lyrics-container">
+
+  <div class="line chorus-block" style="border-left-color:rgba(255,255,255,0.3)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">RUDE!</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">이랬다저랬다 No rule</div>
+    <div class="line-thai">อิ-แรต-ตา-จอ-แรต-ตา โน รูล</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">꽤나 뻔뻔한 Attitude</div>
+    <div class="line-thai">กแว-นา พอน-พอน-ฮัน แอตติจูด</div>
+    <div class="line-korean c-stella" style="font-size:13px; margin-top:6px;">(I'm not bad) — Stella</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">You can't make me act right</div>
+    <div class="line-thai">ยู แคนท์ เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+  <div class="line chorus-block" style="border-left-color:rgba(255,255,255,0.3)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">RUDE!</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">I don't care 이게 나라구</div>
+    <div class="line-thai">ไอ โดนท์ แคร์ อิ-เก นา-รา-กู</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">아무렇게나 추는 춤</div>
+    <div class="line-thai">อา-มู-รอก-เก-นา ชู-นึน ชุม</div>
+    <div class="line-korean c-yeon" style="font-size:13px; margin-top:6px;">(따라 해) — Ye-on</div>
+    <div class="line-korean" style="font-size:14px; margin-top:6px;">You can't make me act right</div>
+    <div class="line-thai">ยู แคนท์ เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+</div>
+
+<!-- ===== OUTRO ===== -->
+<div class="section-label">OUTRO</div>
+<div class="lyrics-container">
+
+  <div class="line carmen">
+    <span class="member-tag c-carmen">Carmen</span>
+    <div class="line-korean">내 멋대로 Move</div>
+    <div class="line-thai">เน มอต-แด-โร มูฟ</div>
+  </div>
+
+  <div class="line" style="border-left-color:rgba(255,255,255,0.25)">
+    <span class="member-tag all-tag">ALL</span>
+    <div class="line-korean">Make me act right</div>
+    <div class="line-thai">เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+  <div class="line ian">
+    <span class="member-tag c-ian">Ian</span>
+    <div class="line-korean">내 멋대로 Move</div>
+    <div class="line-thai">เน มอต-แด-โร มูฟ</div>
+  </div>
+
+  <div class="line" style="border-left-color:rgba(255,255,255,0.25)">
+    <span class="member-tag all-tag">Ye-on / ALL</span>
+    <div class="line-korean">Make me act right</div>
+    <div class="line-thai">เมค มี แอ็คท์ ไรท์</div>
+  </div>
+
+</div>
+
+<div class="footer" style="margin-top:48px;">
+  ♡ Hearts2Hearts · RUDE! · 2026 ♡
+</div>
+
+</body>
+</html>
